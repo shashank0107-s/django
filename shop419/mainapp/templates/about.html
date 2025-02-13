@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %}
+    About
+{% endblock %}
+
+    {% block content %} 
+   
+        <!---accessing values-->
+
+        {{name}}
+        <!---loops-->
+        <ul>
+            {% for student in students %}
+            <li>{{student}}</li>
+            {% endfor %}
+        </ul>
+
+        <!--conditionals-->
+        {%if slept%}
+        i slept
+        {%else%}
+        i did not sleep
+        {%endif%}
+    {% endblock %}  
