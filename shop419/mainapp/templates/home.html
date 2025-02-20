@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block title %}
+    Home
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="container-fluid">
+        <table class="table">
+            <thead>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Pic path</th>
+                <th>Thumbnail</th>
+                <th>Stock</th>
+            </thead>
+            {% for product in product_list %}
+                <tr>
+                    <td>{{product.id}}</td>
+                    <td>
+                        <a href="{% url 'product_details' product.id %}">
+                            {{product.name}}
+                        </a>
+                    </td>
+                    <td>{{product.price}}</td>
+                    <td>{{product.desc}}</td>
+                    <td>{{product.pic}}</td>
+                    <td><img src = "{{product.pic}}" height="20px" alt="image not found"></td>
+                    <td>{{product.stock}}</td>
+                </tr>
+            {%endfor%}
+        </table>
+    </div>
+{% endblock %}
