@@ -32,10 +32,11 @@
                     <td>{{product.price}}</td>
                     <td>{{product.desc}}</td>
                     <td>{{product.pic}}</td>
-                    <td><img src = "{{product.pic}}" height="20px" alt="image not found"></td>
+                    <td><img src="{% static product.pic %}" height="20px" alt="image not found"></td>
                     <td>{{product.stock}}</td>
+                    <td><a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">Add product</a></td>
                 </tr>
-            {%endfor%}
+            {% endfor %}
         </table>
     </div>
 {% endblock %}

@@ -9,7 +9,6 @@ urlpatterns = [
     path('products/add',views.AddProducts.as_view(),name='addprod'),#C
     path('products/edit/<int:pk>',views.UpdateProducts.as_view(),name='edit_prod'),#U
     path('products/delete/<int:pk>',views.DeleteProducts.as_view(),name='del_prod'),#D
-
    # search path
    path('products/search', views.searchView, name='search')
 ]

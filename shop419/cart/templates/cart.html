@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{user}}'s Cart
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    {% if cart_items %}
+    <table class="table" data-bs-theme="dark">
+        <thead >
+            <th></th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+            <th></th>
+        </thead>
+        <tbody>
+        {% for item in cart_items %}
+            <tr>
+                <td><img src="{{item.product.pic.url}}" height="20px" alt=""></td>
+                <td>
+                    <a href="{% url 'product_details' item.product.id %}">
+                    {{item.product.name}}
+                    </a>
+                </td>
+                
+                <td>{{item.product.price}}</td>  
+                <td class="grid">
+                    <div class="row w-100">            
+                    <button onclick="updateCart('{% url 'rem_quantity' item.id %}', {{ item.id }}, false, '{{ csrf_token }}')" class="btn btn-outline-secondary col align-middle">
+                        -
+                    </button>
+                        <p id="quantity-{{ item.id }}" class="col align-middle text-center">{{item.quantity}}</p>
+                    <button onclick="updateCart('{% url 'add_quantity' item.id %}', {{ item.id }}, true, '{{ csrf_token }}')" class="btn btn-outline-secondary col align-middle">+</button>
+                    </div>
+                </td>
+                <td id="total-price-{{ item.id }}">
+                    {{item.get_total_price}}
+                </td>
+                <td>
+                    <a href="{% url 'rem_from_cart' item.id %}" class="btn btn-danger">Remove from Cart</a>
+                </td>
+            </tr>
+            {% endfor %} 
+        </tbody>
+  
+    </table>
+    {% else %}
+    <div class="text-center text-warning">Cart is Empty  </div>
+    {% endif %}
+    <a href="{% url 'homepage'}" class=" btn btn-primary">Shop More!!</a>
+</div>
+
+{% endblock %}
