@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect
 from mainapp.models import Product
 from .models import CartItem
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
 # C - Creating cart items
-#login required
+@login_required
 def addToCart(request, product_id):
     this_product = Product.objects.get(id = product_id) # fetching the product object
     # When adding product to cart, we need to check if the same user has added the same product
@@ -21,7 +23,7 @@ def addToCart(request, product_id):
     return redirect('view_cart')
 
 # R - Read Cartitems
-
+@login_required
 def viewCart(request):
     template = 'cart.html'
     cart_items = CartItem.objects.filter(user = request.user) 
@@ -34,7 +36,8 @@ def viewCart(request):
     }
     return render( request, template, context)
 
-#D - Delete Cartitems
+# D - Delete Cartitems
+@login_required
 def remove_from_cart(request, cart_item_id):
     this_cart_item = CartItem.objects.get(id = cart_item_id)
     this_cart_item.delete() #deletes the associated record as well as the cart items obj in memory
@@ -47,7 +50,12 @@ def addQuantity(request, cart_item_id):
     cart_item.quantity += 1
     cart_item.save()
     overall_total = sum(item.get_total_price() for item in CartItem.objects.filter(user=request.user))
-    return JsonResponse({'quantity': cart_item.quantity, 'total_price': cart_item.get_total_price(), 'overall_total': overall_total})
+    context = {
+        'quantity': cart_item.quantity, 
+        'total_price': cart_item.get_total_price(), 
+        'overall_total': overall_total
+        }
+    return JsonResponse(context)
 
 @login_required
 def remQuantity(request, cart_item_id):
@@ -56,8 +64,17 @@ def remQuantity(request, cart_item_id):
         cart_item.quantity -= 1
         cart_item.save()
         overall_total = sum(item.get_total_price() for item in CartItem.objects.filter(user=request.user))
-        return JsonResponse({'quantity': cart_item.quantity, 'total_price': cart_item.get_total_price(), 'overall_total': overall_total})
+        context = {
+            'quantity': cart_item.quantity, 
+            'total_price': cart_item.get_total_price(), 
+            'overall_total': overall_total}
+        return JsonResponse(context)
     else:
         cart_item.delete()
         overall_total = sum(item.get_total_price() for item in CartItem.objects.filter(user=request.user))
-        return JsonResponse({'quantity': 0, 'total_price': 0, 'overall_total': overall_total})
+        context = {
+            'quantity': 0, 
+            'total_price': 0, 
+            'overall_total': overall_total
+            }
+        return JsonResponse(context)
