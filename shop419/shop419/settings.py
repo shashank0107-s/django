@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'mainapp', #include every new app here
     'authentication',
     'cart',
+    'orders',
+    'payments',
 ]
 
 MIDDLEWARE = [
